@@ -1,0 +1,418 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"/>
+    <title>index</title>
+    <style>
+        ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        a:hover {
+            text-decoration: none
+        }
+
+        #inputBox {
+            float: left;
+        }
+
+        #getSingerID {
+            margin-left: 5px;
+            display: inline-block;
+        }
+
+        #name {
+            width: 207px;
+            display: inline-block;
+        }
+
+        .title {
+            display: block;
+            position: relative;
+            text-transform: uppercase;
+            font-family: Scratch;
+            color: #767676;
+        }
+
+        #title-logo {
+            color: #f91543;
+        }
+
+        #showInfo {
+            width: 299px;
+            height: auto;
+            background: #EEE;
+            font-family: Scratch;
+            margin-top: 40px;
+            color: #3c3c3c;
+            text-align: left;
+            line-height: 30px;
+        }
+
+        #songList {
+            list-style: none;
+        }
+
+        #songList a > label {
+            width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: sans-serif;
+        }
+
+        .content {
+            display: inline-block;
+            width: 400px;
+            min-height: 470px;
+            max-height: 470px;
+            overflow-y: auto;
+            border-right: 1px solid #bababa;
+            float: left;
+            margin-left: 50px;
+            margin-top: 38px;
+            -webkit-scrollbar-button: none;
+            -webkit-scrollbar-button: none;
+        }
+
+        #content-box {
+            width: auto;
+            height: auto;
+            position: inherit;
+        }
+
+        #toolBar {
+            width: 100px;
+            height: 400px;
+            background: #EEE;
+            display: inline-block;
+            margin-left: 60px;
+            border-right: 5px solid #bababa;
+            float: left;
+            margin-top: 38px;
+        }
+
+        #play-Box {
+            width: 532px;
+            height: 400px;
+            background: #EEEEEE;
+            display: none;
+            display: inline-block;
+            margin-top: 38px;
+            border: 1px solid #bababa;
+        }
+
+        #sing-img {
+            background-image: url("{% static 'imgs/logo.png' %}");
+            background-repeat: no-repeat;
+            background-size: 100%;
+            -moz-background-size: 100% 100%;
+            height: 95px;
+        }
+
+        #footer {
+            height: 80px;
+            width: 100%;
+            background: #393D49;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        #toolUl .list-group-item {
+            height: 62px;
+        }
+
+        #lyricList {
+            width: 100%;
+            float: left;
+            height: 100px;
+            margin-top: 253px;
+            text-align: center;
+            color: #a8a8a8;
+            overflow-y: hidden;
+            background: #EEE;
+        }
+
+        #lyricList ul {
+            position: relative;
+        }
+
+        #lyricList ul li {
+            list-style: none;
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        #masklayer {
+            background: rgba(0, 0, 0, .6);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+            z-index: 200;
+            background-image: url("{% static 'imgs/loding2.gif' %}");
+            background-position: center;
+            background-size: 5%;
+            background-repeat: no-repeat;
+        }
+
+    </style>
+</head>
+<body>
+<div id="masklayer"></div>
+<div id="header-line" style="height: 15px;width: 100%; background: #393D49"></div>
+<div id="container">
+    <h2 class="title">&nbsp welcom to Dajngo web
+        <span id="title-logo" class="glyphicon glyphicon-headphones"></span>
+    </h2>
+    <h3 class="title" style="margin-left: 50px;">You Can Download Music In This For Free</h3>
+
+    <div class="content">
+        <div id="content-box">
+            <div id="inputBox" class="form-group">
+                <input id="name" type="text" class="form-control"/>
+                <input id="getSingerID" type="button" value="GetSongs" class="btn btn-info"/>
+            </div>
+        </div>
+
+        <div id="showInfo">
+            <ul class="list-group" id="songList" style="display: none">
+            </ul>
+        </div>
+    </div>
+    <div id="toolBar">
+        <ul id="toolUl" class="list-group">
+            <div id="sing-img">
+
+            </div>
+
+            <div class="list-group-item">
+                <div tool-data="play" class="btn btn-success">
+                    <span class="glyphicon glyphicon-play"></span>
+                </div>
+            </div>
+            <div class="list-group-item">
+                <div tool-data="pause" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-pause"></span>
+                </div>
+            </div>
+            <div class="list-group-item">
+                <div tool-data="stop" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-stop"></span>
+                </div>
+            </div>
+            <div class="list-group-item">
+                <div tool-data="next" class="btn btn-default">
+                    <span class="glyphicon glyphicon-forward"></span>
+                </div>
+            </div>
+            <div class="list-group-item">
+                <div tool-data="pre" class="btn btn-default">
+                    <span class="glyphicon glyphicon-backward"></span>
+                </div>
+            </div>
+        </ul>
+    </div>
+    <div id="play-Box">
+        <div id="lyricList">
+            <ul></ul>
+        </div>
+        <audio id="player" controls loop preload="metadata" style="width:530px; float: left;margin-top:12px;">
+            <source src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <br/>
+    </div>
+</div>
+<div id="footer">
+</div>
+
+
+<script>
+    window.onload = function () {
+        var lyric;
+        var obj = $('#getSingerID');
+        var audio = document.getElementsByTagName('audio');
+        lyricContainer = document.getElementById('lyricList');
+
+        var _webkit = /webkit/.test(navigator.userAgent.toLowerCase());
+
+        if (/firefox/.test(navigator.userAgent.toLowerCase())) {
+            $('#player').css('bottom', '192px');
+        } else if (_webkit) {
+            $('#player').css('bottom', '195px');
+        } else {
+            //
+        }
+        obj.click(function () {
+            $("#songList").empty();
+            $("#masklayer").show();
+
+            $.ajax({
+                type: "POST",
+                url: '/getSong/',
+                data: {
+                    name: $("#name").val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'//CSRF处理2
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    var res = data['data'];
+                    if (res == 'Not Found') {
+                        $("#songList").show().html(res);
+                        $("#masklayer").hide();
+                    }
+                    var resArr = res;
+                    for (i in resArr) {
+                        if (i != resArr.length - 1) {//JS不能用onclick方法添加响应函数因为append的元素是未来元素还未加载无效
+                            titleStr = resArr[i];
+                            $("#songList").show().append(
+                                '<a id="song' + i + '" href="#" class="list-group-item">' +
+                                '<label>' + (parseInt(i) + 1) + '.' + JSON.parse(resArr[i])['name'] + '</label>' +
+                                '<span id = "down_' + JSON.parse(resArr[i])['id'] + '" data- style="float:right;margin-top:5px;font-size:18px;" class="glyphicon glyphicon-download-alt"></span>' +
+                                '<span id = "play_' + JSON.parse(resArr[i])['id'] + '" class="glyphicon glyphicon-play" style="font-size:18px;float:right;margin-top:5px;"></span>' +
+                                '</a>');
+                        }
+                    }
+
+                    $("#masklayer").hide()//隐藏遮罩层
+
+                    var preurl = "{% static '/imgs/singers/' %}";
+                    var url = "url(" + preurl + $("#name").val() + ".jpg) no-repeat";
+                    $('#play-Box').css("background", url).css("background-size", "100%");
+                },
+                error: function (data) {
+
+                }
+            });
+        });
+
+        //使用事件委托的方法添加响应函数
+        $(document).on("click", "#songList > a", function () {
+            var fileId = $(this).attr("id");
+            //alert(fileId)
+        });
+
+        //下载按钮响应事件
+        $(document).on("click", "span[id^='down']", function () {
+            var fileId = $(this).attr("id");
+            alert(fileId)
+        });
+
+        //播放按钮响应事件
+        $(document).on("click", "span[id^='play']", function () {
+            var currentObj = $(this);
+            $('#lyricList ul').empty(); //清空歌词
+            $.ajax({
+                type: "POST",
+                url: '/playSong/',
+                data: {
+                    id: currentObj.attr("id").split("_")[1],
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'//CSRF处理2
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    //数据赋值
+                    var url = JSON.parse(data['data'][0])['url'];
+                    $("#player").attr("src", url);
+                    var lyricList = JSON.parse(data['data'][0])['lyric'];
+                    lyric = parseLyric(lyricList);
+
+                    for (var i = 0, li; i < lyric.length; i++) {
+                        li = $('<li>' + lyric[i][1] + '</li>');
+                        $('#lyricList ul').append(li);
+                    }
+
+                    //$("#lyricList").empty().html(lyric);
+                    document.getElementById('player').play();
+
+                    var preurl = "{% static '/imgs/songs/' %}";
+                    var url = "url(" + preurl + (currentObj.attr("id").split("_")[1]).toString() + ".jpg) no-repeat";
+                    $('#sing-img').css("background-imgage", '');
+                    $('#sing-img').css("background", url).css("background-size", "100%");
+                },
+                error: function (data) {
+                    console.log("running error");
+                }
+            });
+        });
+
+        function parseLyric(text) {
+            if (text == '') {
+                return 0;
+            }
+            //将文本分隔成一行一行，存入数组
+            var lines = text.split('\n'),
+                //用于匹配时间的正则表达式，匹配的结果类似[xx:xx.xx]
+                pattern = /\[\d{2}:\d{2}.\d{1,3}\]/g,
+                //保存最终结果的数组
+                result = [];
+            //去掉不含时间的行
+            //while (!pattern.test(lines[0])) {
+                //lines = lines.slice(1);
+            //}
+            //上面用'\n'生成生成数组时，结果中最后一个为空元素，
+            for(index in lines) {
+                if(lines[index] == '') {
+                    lines.pop()
+                }
+            }
+
+            //lines[lines.length - 1].length === 0 && lines.pop();
+            lines.forEach(function (v /*数组元素值*/, i /*元素索引*/, a /*数组本身*/) {
+                //提取出时间[xx:xx.xx]
+                var time = v.match(pattern),
+                    //提取歌词
+                    value = v.replace(pattern, '');
+
+                //因为一行里面可能有多个时间，所以time有可能是[xx:xx.xx][xx:xx.xx][xx:xx.xx]的形式，需要进一步分隔
+                for(key in time) {
+                    if (time[key]){
+                        var t = time[key].slice(1, -1).split(':');
+                        //将结果压入最终数组
+                        result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value]);
+                    }
+                }
+            });
+            //最后将结果数组中的元素按时间大小排序，以便保存之后正常显示歌词
+            result.sort(function (a, b) {
+                return a[0] - b[0];
+            });
+            return result;
+        }
+
+        //获取页面上的audio标签
+        var audio = document.getElementsByTagName('audio'),
+            //显示歌词的元素
+            lyricContainer = document.getElementById('lyricContainer');
+        //监听ontimeupdate事件
+
+        audio[0].ontimeupdate = function () {
+            //遍历所有歌词，看哪句歌词的时间与当然时间吻合
+            for (var i = 0, l = lyric.length; i < l; i++) {
+                if (this.currentTime /*当前播放的时间*/ > lyric[i][0]) {
+                    //显示到页面
+                    $('#lyricList ul').css('top', -i * 40 + 'px'); //让歌词向上移动
+                    $('#lyricList ul li').css('color', '#333');
+                    $('#lyricList ul li:nth-child(' + (i + 1) + ')').css('color', '#408bf9'); //高亮显示当前播放的哪一句歌词
+                }
+
+                if (this.ended) { //判断当前播放的音乐是否播放完毕
+                    $('#lyricList ul').empty(); //清空歌词
+                    return;
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>
