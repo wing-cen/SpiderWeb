@@ -1,6 +1,5 @@
 # SpiderWeb
 网易云音乐爬取学习
-# Python3-6-0
 # Author：WING
 
 下载歌曲需要注意python3 urlretrieve 需要导入 import urllib.request<br/>  
