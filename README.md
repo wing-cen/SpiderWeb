@@ -10,3 +10,6 @@
 4、通过网页云API转换获取歌词JSON数据<br/> 
 5、通过歌曲ID和名字加上对外连接下载地址获取歌曲源文件（怎么获取对外连接下载地址是个问题）<br/>
 6、加入了Django框架构建前端页面展示数据<br/>
+
+<h3>程序运行展示</h3>
+<img src="https://github.com/wing-cen/SpiderWeb/blob/master/web.png"/>
